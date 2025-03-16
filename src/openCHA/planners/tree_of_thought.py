@@ -15,7 +15,7 @@ class TreeOfThoughtPlanner(BasePlanner):
     **Description:**
 
         This class implements Tree of Thought planner, which inherits from the BasePlanner base class.
-        Tree of Thought employs parallel chain of thoughts startegies and decides which one is more
+        Tree of Thought employs parallel chain of thoughts strategies and decides which one is more
         suitable to proceed to get to the final answer.
         `Paper <https://arxiv.org/abs/2305.10601>`_
 
@@ -100,20 +100,27 @@ USER: {input} \n CHA:
 Tools:
 {tool_names}
 =========================
+Use the following datapipe_key for file input:
+{meta_key}
+=========================
 
 You are skilled python programmer that can solve problems and convert them into python codes. \
 Using the selected final strategy mentioned in the 'Decision:
 ', create a python code inside a ```python ``` block that outlines a sequence of steps using the Tools. \
 assume that there is an **self.execute_task** function that can execute the tools in it. The execute_task \
-recieves task name and an array of the inputs and returns the result. Make sure that you always pass and array as second argument. \
+receives task name and an array of the inputs and returns the result. Make sure that you always pass and array as second argument. \
 You can call tools like this: \
 **task_result = self.execute_task('tool_name', ['input_1', 'input2', ...])**. \
+For a file input, the generated code should look something like this: \
+**task_result = self.execute_task('tool_name', ['datapipe:datapipe_key'])**. \
+Only use the tools specified under tools.
 The flow should utilize this style representing the tools available. Make sure all the execute_task calls outputs are stored in a variable.\
 If a step's output is required as input for a subsequent step, ensure the python code captures this dependency clearly. \
 The output variables should directly passed as inputs with no changes in the wording.
 If the tool input is a datapipe only put the variable as the input. \
 For each tool, include necessary parameters directly without any names and assume each will return an output. \
-The outputs' description are provided for each Tool individually. Make sure you use the directives when passing the outputs.
+The outputs' description are provided for each tool individually. Make sure you use the directives when passing the outputs.
+Only use tools specified under tools.
 
 Question: {input}
 """,
@@ -223,7 +230,12 @@ Question: {input}
 
         previous_actions_prompt = ""
         if len(previous_actions) > 0 and self.use_previous_action:
-            previous_actions_prompt = f"Previoius Actions:\n{self.generate_scratch_pad(previous_actions, **kwargs)}"
+            previous_actions_prompt = f"Previous Actions:\n{self.generate_scratch_pad(previous_actions, **kwargs)}"
+
+        print(meta)
+        matches = re.findall(r'is stored with the key \$datapipe:([a-z0-9\-]+)\$', meta)
+        meta_key = f"datapipe:{matches[-1]}" if matches else ""
+        print(meta_key)
 
         prompt = (
             self._planner_prompt[0]
@@ -252,6 +264,7 @@ Question: {input}
             .replace("{tool_names}", self.get_available_tasks())
             .replace("{previous_actions}", previous_actions_prompt)
             .replace("{input}", query)
+            .replace("{meta_key}", meta_key)
         )
         print("prompt2\n\n", prompt)
         kwargs["stop"] = self._stop

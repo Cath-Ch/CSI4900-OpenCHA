@@ -1,8 +1,9 @@
+import json
 import os
 from typing import List
 from typing import Tuple
 
-from openCHA.datapipes import DatapipeType
+from openCHA.datapipes import DatapipeType, Memory, initialize_datapipe
 from openCHA.interface import Interface
 from openCHA.llms import LLMType
 from openCHA.orchestrator import Orchestrator
@@ -134,8 +135,8 @@ class openCHA(BaseModel):
         )
 
     def upload_meta(self, history, file):
+        self.meta.append(file)
         history = history + [((file.name,), None)]
-        self.meta.append(file.name)
         return history
 
     def run(

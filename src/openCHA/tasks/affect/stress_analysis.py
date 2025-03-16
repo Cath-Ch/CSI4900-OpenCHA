@@ -31,7 +31,7 @@ class StressAnalysis(Affect):
     outputs: List[str] = [
         "returns the stress level out of 4. 0 is very low and 4 is very high. convert the number into proper interpretation."
     ]
-    # False if the output should directly passed back to the planner.
+    # False if the output should be directly passed back to the planner.
     # True if it should be stored in datapipe
     output_type: bool = True
     AE: Any = None
@@ -53,14 +53,15 @@ class StressAnalysis(Affect):
         """
 
         try:
-            from tasks.affect.AE import AE
-            from tasks.affect.Predictor import Predictor
+            from openCHA.tasks.affect.AE import AE
+            from openCHA.tasks.affect.Predictor import Predictor
             import torch
 
             values["AE"] = AE
             values["torch"] = torch
             values["Predictor"] = Predictor
-        except ImportError:
+        except Exception as e:
+            print(e)
             raise ValueError(
                 "Could not import torch python package. "
                 "Please install it with `pip install torch`."

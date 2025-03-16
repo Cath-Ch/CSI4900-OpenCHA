@@ -7,6 +7,7 @@ from openCHA.tasks.google_translator import GoogleTranslate
 from openCHA.tasks.run_python_code import RunPythonCode
 from openCHA.tasks.serpapi import SerpAPI
 from openCHA.tasks.test_file import TestFile
+from openCHA.tasks.ppg_upload import PPGUpload
 from openCHA.tasks.types import TASK_TO_CLASS
 from openCHA.tasks.initialize_task import initialize_task
 
@@ -23,4 +24,5 @@ __all__ = [
     "TaskType",
     "TestFile",
     "TASK_TO_CLASS",
+    "PPGUpload",
 ]

@@ -17,11 +17,11 @@ class PPGGet(Affect):
     chat_name: str = "AffectPPGGet"
     description: str = (
         "Returns the ppg data for a specific patient over a date or a period (if two dates are provided). "
-        "This will return the detailed raw data and stores it in the datapipe."
+        "This will return the detailed raw data and store it in the datapipe."
     )
     dependencies: List[str] = []
     inputs: List[str] = [
-        "user ID in string. It can be refered as user, patient, individual, etc. Start with 'par_' following with a number (e.g., 'par_1').",
+        "user ID in string. It can be referred to as user, patient, individual, etc. Start with 'par_' following with a number (e.g., 'par_1').",
         "start date of the sleep data in string with the following format: `%Y-%m-%d`",
         (
             "end date of the sleep data in string with the following format: `%Y-%m-%d`. "
@@ -34,7 +34,7 @@ class PPGGet(Affect):
         "\n**ppg**: is the ppg value."
         "\n**hr (in beats per minute)**: is the heart rate of the patient."
     ]
-    # False if the output should directly passed back to the planner.
+    # False if the output should be directly passed back to the planner.
     # True if it should be stored in datapipe
     output_type: bool = True
     #

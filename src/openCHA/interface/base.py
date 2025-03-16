@@ -138,7 +138,10 @@ class Interface(BaseModel):
             )
 
             btn.upload(
-                upload_meta, [chatbot, btn], [chatbot], queue=False
+                upload_meta,
+                [chatbot, btn],
+                [chatbot],
+                queue=False
             )
 
         demo.launch(share=share)

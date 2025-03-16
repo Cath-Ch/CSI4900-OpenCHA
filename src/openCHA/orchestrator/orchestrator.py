@@ -455,7 +455,7 @@ class Orchestrator(BaseModel):
             try:
                 self.print_log(
                     "planner",
-                    f"Continueing Planning... Try number {i}\n\n",
+                    f"Continuing Planning... Try number {i}\n\n",
                 )
                 actions = self.plan(
                     query=prompt,

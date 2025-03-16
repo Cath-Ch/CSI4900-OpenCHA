@@ -22,7 +22,7 @@ class BaseTask(BaseModel):
         name:           The name of the task. It should be unique underscore_case to be defined in TaskType. sample_task_name
         chat_name:      This is the name that later will be used if needed to mention the tasks inside the chat with the user.
                         It should be Camel Case. SampleTaskChatName
-        description:    The description of the what specifically the task is doing.
+        description:    The description of what the task is specifically doing.
                         Try to define it as specific as possible to help the Task Planner decide better.
         dependencies:   You can put the name of the TaskTypes that this task is dependent on. For example, in stress detection scenario,
                         the stress analysis is dependent on the fetch hrv data task. [TaskType.SERPAPI, TASKTYPE.EXTRACT_TEXT]
@@ -108,19 +108,44 @@ class BaseTask(BaseModel):
 
 
         """
-        return [
-            json.loads(
-                self.datapipe.retrieve(
-                    re.search(r"datapipe:[0-9a-f\-]{36}", arg)
-                    .group()
-                    .strip()
-                    .split(":")[-1]
-                )
-            )
-            if "datapipe" in arg
-            else arg.strip()
-            for arg in input_args
-        ]
+        # return [
+        #     json.loads(
+        #         self.datapipe.retrieve(
+        #             re.search(r"datapipe:[0-9a-f\-]{36}", arg)
+        #             .group()
+        #             .strip()
+        #             .split(":")[-1]
+        #         )
+        #     )
+        #     if "datapipe" in arg
+        #     else arg.strip()
+        #     for arg in input_args
+        # ]
+        parsed_inputs = []
+        for arg in input_args:
+            if "datapipe" in arg:
+                # Extract the datapipe key
+                match = re.search(r"datapipe:[0-9a-f\-]{36}", arg)
+                if not match:
+                    raise ValueError(f"Invalid datapipe key format: {arg}")
+                datapipe_key = match.group().strip().split(":")[-1]
+
+                # Retrieve data from datapipe
+                data = self.datapipe.retrieve(datapipe_key)
+
+                # If the data is a file path, return it directly
+                if isinstance(data, str):
+                    parsed_inputs.append(data)
+                else:
+                    # If the data is JSON, parse it
+                    try:
+                        parsed_inputs.append(json.loads(data))
+                    except json.JSONDecodeError:
+                        parsed_inputs.append(data)  # Return raw data if not JSON
+            else:
+                # If the input is not a datapipe key, return it as-is
+                parsed_inputs.append(arg.strip())
+        return parsed_inputs
 
     def _validate_inputs(self, inputs: List[str]) -> bool:
         """
