@@ -1,4 +1,4 @@
-from openCHA.tasks.affect import StressAnalysis
+from openCHA.tasks.affect import StressAnalysisBinary
 from openCHA.tasks.affect import PPGAnalysis
 from openCHA.tasks import BaseTask
 from typing import List, Any
@@ -16,14 +16,14 @@ class PPGUpload(BaseTask):
     name: str = "ppg_upload"
     chat_name: str = "PPGUpload"
     description: str = (
-        "This task takes an uploaded PPG data file path, converts the txt file to json, and analyses the stress level using ppg_analysis and stress_analysis."
+        "This task takes an uploaded PPG data file path, converts the txt file to json, and analyses the stress level using ppg_analysis and stress_analysis (internally - no need to call these tasks after)."
     )
     dependencies: List[str] = []
     inputs: List[str] = [
         "A list containing the datapipe key (in the form of datapipe:datapipe_key) that will be used to retrieve the file path of the uploaded PPG data."
     ]
     outputs: List[str] = [
-        "returns the stress level out of 4. 0 is very low and 4 is very high. convert the number into proper interpretation."
+        "Returns 1 if the individual is stressed, 0 if the individual is not stressed."
     ]
     output_type: bool = True  # Store the result in the datapipe
 
@@ -68,7 +68,7 @@ class PPGUpload(BaseTask):
 
             # Process the HRV data (e.g., analyze stress levels)
             stress_analysis_input = [{"data": hrv_data}]
-            stress_analysis = StressAnalysis()
+            stress_analysis = StressAnalysisBinary()
             stress_level = stress_analysis._execute(stress_analysis_input)
 
             return json.dumps({"stress_level": stress_level})

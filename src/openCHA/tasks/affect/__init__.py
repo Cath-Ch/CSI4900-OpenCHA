@@ -6,7 +6,7 @@ from openCHA.tasks.affect.ppg_get import PPGGet
 from openCHA.tasks.affect.sleep_analysis import SleepAnalysis
 from openCHA.tasks.affect.sleep_get import SleepGet
 from openCHA.tasks.affect.stress_analysis import StressAnalysis
-
+from openCHA.tasks.affect.stress_analysis_binary import StressAnalysisBinary
 
 __all__ = [
     "Affect",
@@ -17,4 +17,5 @@ __all__ = [
     "PPGGet",
     "PPGAnalysis",
     "StressAnalysis",
+    "StressAnalysisBinary",
 ]

@@ -18,6 +18,7 @@ from openCHA.tasks.affect import PPGGet
 from openCHA.tasks.affect import SleepAnalysis
 from openCHA.tasks.affect import SleepGet
 from openCHA.tasks.affect import StressAnalysis
+from openCHA.tasks.affect import StressAnalysisBinary
 from openCHA.tasks.nutritionix import (
     CalculateFoodRiskFactor,
 )
@@ -38,6 +39,7 @@ TASK_TO_CLASS: Dict[TaskType, Type[BaseTask]] = {
     TaskType.PPG_GET: PPGGet,
     TaskType.PPG_ANALYSIS: PPGAnalysis,
     TaskType.STRESS_ANALYSIS: StressAnalysis,
+    TaskType.STRESS_ANALYSIS_BINARY: StressAnalysisBinary,
     TaskType.QUERY_NUTRITIONIX: QueryNutritionix,
     TaskType.CALCULATE_FOOD_RISK_FACTOR: CalculateFoodRiskFactor,
     TaskType.GOOGLE_SEARCH: GoogleSearch,

@@ -15,6 +15,7 @@ class TaskType(str, Enum):
     PPG_GET = "affect_ppg_get"
     PPG_ANALYSIS = "affect_ppg_analysis"
     STRESS_ANALYSIS = "affect_stress_analysis"
+    STRESS_ANALYSIS_BINARY = "affect_stress_analysis_binary"
     QUERY_NUTRITIONIX = "query_nutritionix"
     CALCULATE_FOOD_RISK_FACTOR = "calculate_food_risk_factor"
     GOOGLE_SEARCH = "google_search"
